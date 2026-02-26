@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>humaPubli — Arquitetura Organizacional de Agentes</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07070a;
+    --bg-subtle: #0c0c11;
+    --bg-card: #111118;
+    --bg-card-hover: #16161f;
+    --border: #1e1e2a;
+    --border-hover: #2a2a3a;
+    --text: #f0f0f5;
+    --text-muted: #8888a0;
+    --text-dim: #55556a;
+    --grad-1: #ff6b9d;
+    --grad-2: #c850c0;
+    --grad-3: #ff6b35;
+    --gradient: linear-gradient(135deg, #ff6b9d, #c850c0, #ff6b35);
+    --green: #00e676;
+    --green-dim: rgba(0, 230, 118, 0.1);
+    --blue: #448aff;
+    --blue-dim: rgba(68, 138, 255, 0.1);
+    --orange: #ff9100;
+    --orange-dim: rgba(255, 145, 0, 0.1);
+    --purple: #b388ff;
+    --purple-dim: rgba(179, 136, 255, 0.1);
+    --red: #ff5252;
+    --red-dim: rgba(255, 82, 82, 0.1);
+    --yellow: #ffd740;
+    --yellow-dim: rgba(255, 215, 64, 0.1);
+    --cyan: #18ffff;
+    --cyan-dim: rgba(24, 255, 255, 0.1);
+    --pink: #ff6b9d;
+    --pink-dim: rgba(255, 107, 157, 0.1);
+    --glow: rgba(200, 80, 192, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(7, 7, 10, 0.85);
+    backdrop-filter: blur(24px);
+    border-bottom: 1px solid var(--border);
+    height: 56px;
+  }
+  nav .container { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+  .logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .nav-sub { font-size: 0.75rem; color: var(--text-dim); letter-spacing: 0.05em; }
+
+  /* Sections */
+  section { padding: 5rem 0; }
+  section:first-of-type { padding-top: 7rem; }
+
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.15em;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-label::before { content: ''; width: 20px; height: 2px; background: var(--gradient); }
+
+  h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800; line-height: 1.1; letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    font-weight: 800; line-height: 1.15; letter-spacing: -0.03em;
+    margin-bottom: 0.75rem;
+  }
+  h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem; font-weight: 700; margin-bottom: 0.4rem;
+  }
+  .grad {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .subtitle { font-size: 1.05rem; color: var(--text-muted); max-width: 650px; line-height: 1.7; margin-bottom: 2.5rem; }
+
+  /* Org Chart Overview */
+  .org-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .org-dept {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.25rem;
+    text-align: center;
+    transition: all 0.3s;
+    cursor: default;
+  }
+  .org-dept:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+  .org-dept .dept-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .org-dept .dept-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+  .org-dept .dept-count {
+    font-size: 0.7rem; color: var(--text-dim);
+  }
+
+  /* Agent Cards */
+  .agents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .agent-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .agent-card:hover { border-color: var(--border-hover); }
+  .agent-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  }
+  .agent-card.green::before { background: var(--green); }
+  .agent-card.blue::before { background: var(--blue); }
+  .agent-card.orange::before { background: var(--orange); }
+  .agent-card.purple::before { background: var(--purple); }
+  .agent-card.red::before { background: var(--red); }
+  .agent-card.yellow::before { background: var(--yellow); }
+  .agent-card.cyan::before { background: var(--cyan); }
+  .agent-card.pink::before { background: var(--pink); }
+  .agent-card.grad::before { background: var(--gradient); }
+
+  .agent-header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+  .agent-avatar {
+    width: 40px; height: 40px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+  }
+  .agent-avatar.green { background: var(--green-dim); }
+  .agent-avatar.blue { background: var(--blue-dim); }
+  .agent-avatar.orange { background: var(--orange-dim); }
+  .agent-avatar.purple { background: var(--purple-dim); }
+  .agent-avatar.red { background: var(--red-dim); }
+  .agent-avatar.yellow { background: var(--yellow-dim); }
+  .agent-avatar.cyan { background: var(--cyan-dim); }
+  .agent-avatar.pink { background: var(--pink-dim); }
+
+  .agent-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600; font-size: 0.9rem;
+    color: var(--text);
+  }
+  .agent-role { font-size: 0.75rem; color: var(--text-muted); }
+
+  .agent-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
+
+  .agent-tasks { list-style: none; margin-bottom: 1rem; }
+  .agent-tasks li {
+    font-size: 0.8rem; color: var(--text-muted);
+    padding: 0.3rem 0; padding-left: 1.25rem;
+    position: relative; line-height: 1.5;
+  }
+  .agent-tasks li::before {
+    content: '>';
+    position: absolute; left: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700; color: var(--text-dim);
+  }
+
+  .agent-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag {
+    font-size: 0.65rem; font-weight: 600;
+    padding: 0.2rem 0.6rem; border-radius: 100px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .tag-auto { background: var(--green-dim); color: var(--green); }
+  .tag-daily { background: var(--blue-dim); color: var(--blue); }
+  .tag-weekly { background: var(--purple-dim); color: var(--purple); }
+  .tag-monthly { background: var(--orange-dim); color: var(--orange); }
+  .tag-ondemand { background: var(--yellow-dim); color: var(--yellow); }
+  .tag-quarterly { background: var(--red-dim); color: var(--red); }
+
+  /* Advisor Cards */
+  .advisors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  .advisor-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+  }
+  .advisor-card .adv-name {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; font-size: 0.9rem;
+    margin-bottom: 0.15rem;
+  }
+  .advisor-card .adv-real {
+    font-size: 0.7rem; color: var(--text-dim);
+    margin-bottom: 0.5rem; font-style: italic;
+  }
+  .advisor-card .adv-why {
+    font-size: 0.8rem; color: var(--text-muted); line-height: 1.6;
+  }
+  .advisor-card .adv-focus {
+    margin-top: 0.75rem; font-size: 0.7rem;
+    font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* Squad Cards */
+  .squads-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .squad-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+  }
+  .squad-card h3 { font-size: 1.1rem; margin-bottom: 0.25rem; }
+  .squad-mission {
+    font-size: 0.85rem; color: var(--text-muted);
+    margin-bottom: 1rem; font-style: italic;
+  }
+  .squad-members {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    margin-bottom: 1rem;
+  }
+  .squad-member {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; font-weight: 500;
+    padding: 0.25rem 0.6rem;
+    border-radius: 8px; border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .squad-deliverables {
+    font-size: 0.8rem; color: var(--text-dim);
+    line-height: 1.6;
+  }
+  .squad-deliverables strong { color: var(--text-muted); }
+
+  /* Cadence Table */
+  .cadence-table {
+    width: 100%; border-collapse: separate; border-spacing: 0;
+    border-radius: 16px; overflow: hidden;
+    border: 1px solid var(--border); font-size: 0.85rem;
+    margin-top: 1.5rem;
+  }
+  .cadence-table thead th {
+    background: var(--bg-card); padding: 1rem 1.25rem;
+    text-align: left; font-weight: 600; font-size: 0.7rem;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-muted); border-bottom: 1px solid var(--border);
+  }
+  .cadence-table tbody td {
+    padding: 0.85rem 1.25rem; border-bottom: 1px solid var(--border);
+    color: var(--text-muted); vertical-align: top;
+  }
+  .cadence-table tbody tr:last-child td { border-bottom: none; }
+  .cadence-table tbody tr:hover { background: var(--bg-card); }
+  .cadence-table .freq {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700; color: var(--text);
+  }
+
+  /* Phase boxes */
+  .phases-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .phase-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    position: relative;
+  }
+  .phase-card .phase-num {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3rem; font-weight: 900;
+    opacity: 0.08; position: absolute;
+    top: 0.5rem; right: 1rem; line-height: 1;
+  }
+  .phase-card .phase-when {
+    font-size: 0.7rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .phase-card .phase-when.p1 { color: var(--green); }
+  .phase-card .phase-when.p2 { color: var(--blue); }
+  .phase-card .phase-when.p3 { color: var(--purple); }
+  .phase-card ul { list-style: none; margin-top: 0.75rem; }
+  .phase-card li {
+    font-size: 0.8rem; color: var(--text-muted);
+    padding: 0.25rem 0; padding-left: 1rem;
+    position: relative; line-height: 1.5;
+  }
+  .phase-card li::before {
+    content: ''; position: absolute; left: 0; top: 0.55rem;
+    width: 4px; height: 4px; border-radius: 50%;
+    background: var(--text-dim);
+  }
+
+  .divider {
+    border: none; border-top: 1px solid var(--border);
+    margin: 1rem 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .agents-grid, .squads-grid { grid-template-columns: 1fr; }
+    .org-overview { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="logo">humaPubli</div>
+    <div class="nav-sub">Arquitetura Organizacional de Agentes</div>
+  </div>
+</nav>
+
+<!-- ═════════════════════════════════ -->
+<!-- INTRO                             -->
+<!-- ═════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Visão Geral</div>
+    <h1>A empresa inteira.<br><span class="grad">Rodando com agentes IA.</span></h1>
+    <p class="subtitle">16 agentes operacionais, 10 advisors estratégicos, 5 squads cross-funcionais. Cada um com função clara, cadência definida e deliverables mensuráveis.</p>
+
+    <div class="org-overview">
+      <div class="org-dept">
+        <div class="dept-icon">&#x1F3AF;</div>
+        <div class="dept-name">Strategy</div>
+        <div class="dept-count">2 agentes + 3 advisors</div>
+      </div>
+      <div class="org-dept">
+        <div class="dept-icon">&#x1F4B0;</div>
+        <div class="dept-name">Finance</div>
+        <div class="dept-count">2 agentes + 2 advisors</div>
+      </div>
+      <div class="org-dept">
+        <div class="dept-icon">&#x1F4E3;</div>
+        <div class="dept-name">Growth</div>
+        <div class="dept-count">3 agentes + 2 advisors</div>
+      </div>
+      <div class="org-dept">
+        <div class="dept-icon">&#x1F91D;</div>
+        <div class="dept-name">Sales</div>
+        <div class="dept-count">2 agentes</div>
+      </div>
+      <div class="org-dept">
+        <div class="dept-icon">&#x1F3A8;</div>
+        <div class="dept-name">Product</div>
+        <div class="dept-count">2 agentes</div>
+      </div>
+      <div class="org-dept">
+        <div class="dept-icon">&#x2696;</div>
+        <div class="dept-name">Legal</div>
+        <div class="dept-count">1 agente + 1 advisor</div>
+      </div>
+      <div class="org-dept">
+        <div class="dept-icon">&#x1F4CA;</div>
+        <div class="dept-name">Data</div>
+        <div class="dept-count">2 agentes</div>
+      </div>
+      <div class="org-dept">
+        <div class="dept-icon">&#x2699;</div>
+        <div class="dept-name">Ops</div>
+        <div class="dept-count">2 agentes + 2 advisors</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════ -->
+<!-- AGENTES 24/7 — ALWAYS ON         -->
+<!-- ═════════════════════════════════ -->
+<section style="background: var(--bg-subtle);">
+  <div class="container">
+    <div class="section-label">Camada 1 — Always On (24/7)</div>
+    <h2>Agentes que <span class="grad">nunca dormem</span>.</h2>
+    <p class="subtitle">Rodam autonomamente, monitoram, alertam e agem. Você acorda e já tem o relatório pronto.</p>
+
+    <div class="agents-grid">
+
+      <div class="agent-card green">
+        <div class="agent-header">
+          <div class="agent-avatar green">&#x1F4CA;</div>
+          <div>
+            <div class="agent-name">@sentinel</div>
+            <div class="agent-role">Data Intelligence Agent</div>
+          </div>
+        </div>
+        <div class="agent-desc">Monitora todas as métricas de campanhas em tempo real. Detecta anomalias, fraudes, picos de performance. Gera alertas automáticos.</div>
+        <ul class="agent-tasks">
+          <li>Tracking de views, cliques, conversões por creator</li>
+          <li>Detecção de fraude (bots, engagement pods, views fake)</li>
+          <li>Alertas de performance (campanha estourando ou morrendo)</li>
+          <li>Dashboard atualizado em real-time</li>
+          <li>Relatório diário automático às 7h</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-auto">24/7 autônomo</span>
+          <span class="tag tag-daily">relatório diário</span>
+        </div>
+      </div>
+
+      <div class="agent-card green">
+        <div class="agent-header">
+          <div class="agent-avatar green">&#x1F916;</div>
+          <div>
+            <div class="agent-name">@concierge</div>
+            <div class="agent-role">Creator & Brand Support</div>
+          </div>
+        </div>
+        <div class="agent-desc">Atendimento automatizado para creators e marcas. Responde dúvidas, guia onboarding, resolve problemas tier 1. Escala para humano quando necessário.</div>
+        <ul class="agent-tasks">
+          <li>Onboarding automatizado de novos creators</li>
+          <li>FAQ dinâmico e suporte via chat/WhatsApp</li>
+          <li>Guia de primeiros passos para marcas</li>
+          <li>Escalação para humano com contexto completo</li>
+          <li>Pesquisa de satisfação pós-campanha</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-auto">24/7 autônomo</span>
+        </div>
+      </div>
+
+      <div class="agent-card green">
+        <div class="agent-header">
+          <div class="agent-avatar green">&#x1F50D;</div>
+          <div>
+            <div class="agent-name">@radar</div>
+            <div class="agent-role">Market Intelligence</div>
+          </div>
+        </div>
+        <div class="agent-desc">Monitora o mercado 24/7. Concorrentes, tendências, creators em ascensão, marcas que estão investindo em influencer marketing. Alimenta toda a empresa com inteligência.</div>
+        <ul class="agent-tasks">
+          <li>Monitoramento de concorrentes (BrandLovrs, Squid, etc.)</li>
+          <li>Identificação de creators em ascensão (potenciais early adopters)</li>
+          <li>Trends de conteúdo por vertical (food, fitness, beauty)</li>
+          <li>Alertas de marcas abrindo budget para influencer</li>
+          <li>Report semanal de inteligência de mercado</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-auto">24/7 autônomo</span>
+          <span class="tag tag-weekly">report semanal</span>
+        </div>
+      </div>
+
+      <div class="agent-card green">
+        <div class="agent-header">
+          <div class="agent-avatar green">&#x1F6E1;</div>
+          <div>
+            <div class="agent-name">@compliance</div>
+            <div class="agent-role">Content & Legal Monitor</div>
+          </div>
+        </div>
+        <div class="agent-desc">Monitora todo conteúdo publicado para compliance. Verifica disclosure (#publi), brand safety, CONAR, LGPD. Bloqueia ou alerta antes de virar problema.</div>
+        <ul class="agent-tasks">
+          <li>Verificação de disclosure (#publi, #ad) em conteúdo postado</li>
+          <li>Detecção de brand safety violations</li>
+          <li>Monitoramento de menções negativas à plataforma</li>
+          <li>Auditoria de LGPD (dados de creators e marcas)</li>
+          <li>Alerta imediato para violações graves</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-auto">24/7 autônomo</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════ -->
+<!-- AGENTES DIÁRIOS — OPERAÇÃO       -->
+<!-- ═════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Camada 2 — Operação Diária</div>
+    <h2>Agentes que <span class="grad">tocam o dia a dia</span>.</h2>
+    <p class="subtitle">Standup virtual às 8h. Cada agente reporta progresso, blockers e prioridades do dia.</p>
+
+    <div class="agents-grid">
+
+      <div class="agent-card blue">
+        <div class="agent-header">
+          <div class="agent-avatar blue">&#x1F3AF;</div>
+          <div>
+            <div class="agent-name">@hunter</div>
+            <div class="agent-role">Brand Acquisition</div>
+          </div>
+        </div>
+        <div class="agent-desc">Prospecta, qualifica e fecha marcas. Desde PMEs locais até marcas nacionais. Cuida do pipeline inteiro de vendas B2B.</div>
+        <ul class="agent-tasks">
+          <li>Prospecção outbound (email, DM, LinkedIn)</li>
+          <li>Qualificação de leads (tamanho, budget, fit)</li>
+          <li>Proposta comercial personalizada</li>
+          <li>Follow-up automatizado (cadência 7-touch)</li>
+          <li>Onboarding de marca fechada</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-daily">standup diário</span>
+          <span class="tag tag-weekly">pipeline review</span>
+        </div>
+      </div>
+
+      <div class="agent-card blue">
+        <div class="agent-header">
+          <div class="agent-avatar blue">&#x1F48E;</div>
+          <div>
+            <div class="agent-name">@magnet</div>
+            <div class="agent-role">Creator Acquisition</div>
+          </div>
+        </div>
+        <div class="agent-desc">Atrai, recruta e ativa creators na plataforma. Do micro-influenciador ao creator de nicho. Foco em qualidade, não quantidade.</div>
+        <ul class="agent-tasks">
+          <li>Identificação de creators por vertical/nicho</li>
+          <li>Outreach personalizado (DM, email, collab)</li>
+          <li>Programa de embaixadores (indicação)</li>
+          <li>Ativação de creators dormentes</li>
+          <li>Curadoria de creators por campanha</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-daily">standup diário</span>
+          <span class="tag tag-weekly">funil review</span>
+        </div>
+      </div>
+
+      <div class="agent-card blue">
+        <div class="agent-header">
+          <div class="agent-avatar blue">&#x1F4DD;</div>
+          <div>
+            <div class="agent-name">@campaign-ops</div>
+            <div class="agent-role">Campaign Manager</div>
+          </div>
+        </div>
+        <div class="agent-desc">Gerencia o ciclo de vida de cada campanha. Da criação ao fechamento. Garante que briefings estão claros, cotas distribuídas, resultados apurados.</div>
+        <ul class="agent-tasks">
+          <li>Setup de campanha (briefing, cotas, métricas, budget)</li>
+          <li>Matching creator-marca (algoritmo de fit)</li>
+          <li>Moderação de conteúdo pré-publicação</li>
+          <li>Apuração de resultados e distribuição de recompensas</li>
+          <li>Report de campanha para a marca</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-daily">standup diário</span>
+        </div>
+      </div>
+
+      <div class="agent-card blue">
+        <div class="agent-header">
+          <div class="agent-avatar blue">&#x1F4E3;</div>
+          <div>
+            <div class="agent-name">@growth</div>
+            <div class="agent-role">Growth Marketing</div>
+          </div>
+        </div>
+        <div class="agent-desc">Dono do crescimento. Testa canais, otimiza funis, cria loops virais. Obsecado por CAC, LTV e coeficiente viral.</div>
+        <ul class="agent-tasks">
+          <li>Gestão de redes sociais da humaPubli</li>
+          <li>Testes A/B em landing pages e copies</li>
+          <li>Programa de referral (creator indica creator)</li>
+          <li>Content marketing (cases, blog, vídeos)</li>
+          <li>Loops virais (creator fala da plataforma no conteúdo)</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-daily">standup diário</span>
+          <span class="tag tag-weekly">growth review</span>
+        </div>
+      </div>
+
+      <div class="agent-card blue">
+        <div class="agent-header">
+          <div class="agent-avatar blue">&#x1F4B8;</div>
+          <div>
+            <div class="agent-name">@treasury</div>
+            <div class="agent-role">Financial Operations</div>
+          </div>
+        </div>
+        <div class="agent-desc">Controla fluxo de caixa, processamento de pagamentos, cotas e recompensas. Garante que o dinheiro entra e sai corretamente.</div>
+        <ul class="agent-tasks">
+          <li>Processamento de cotas (recebimento)</li>
+          <li>Cálculo e pagamento de recompensas</li>
+          <li>Fluxo de caixa diário e projeções</li>
+          <li>Conciliação de pagamentos</li>
+          <li>Alertas de anomalias financeiras</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-daily">standup diário</span>
+          <span class="tag tag-monthly">fechamento</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════ -->
+<!-- AGENTES ESTRATÉGICOS — SEMANAL   -->
+<!-- ═════════════════════════════════ -->
+<section style="background: var(--bg-subtle);">
+  <div class="container">
+    <div class="section-label">Camada 3 — Estratégia Semanal/Mensal</div>
+    <h2>Agentes que <span class="grad">pensam o futuro</span>.</h2>
+    <p class="subtitle">Reunião estratégica toda segunda 9h. Board review na primeira segunda de cada mês.</p>
+
+    <div class="agents-grid">
+
+      <div class="agent-card purple">
+        <div class="agent-header">
+          <div class="agent-avatar purple">&#x1F9E0;</div>
+          <div>
+            <div class="agent-name">@ceo-ai</div>
+            <div class="agent-role">Chief Strategy Officer</div>
+          </div>
+        </div>
+        <div class="agent-desc">Braço direito dos founders. Sintetiza inputs de todos os agentes, identifica padrões, sugere pivots, prioriza roadmap. Pensa como um CEO, mas com dados de todos os departamentos.</div>
+        <ul class="agent-tasks">
+          <li>Síntese semanal de todos os departamentos</li>
+          <li>Identificação de riscos e oportunidades</li>
+          <li>Priorização de roadmap (what to build next)</li>
+          <li>Preparação de board reports</li>
+          <li>Análise de cenários e simulações</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-weekly">strategy weekly</span>
+          <span class="tag tag-monthly">board review</span>
+        </div>
+      </div>
+
+      <div class="agent-card purple">
+        <div class="agent-header">
+          <div class="agent-avatar purple">&#x1F3D7;</div>
+          <div>
+            <div class="agent-name">@architect</div>
+            <div class="agent-role">Product & Tech Architect</div>
+          </div>
+        </div>
+        <div class="agent-desc">Desenha a plataforma. Desde a UX até a infraestrutura. Decide stack, prioriza features, faz trade-offs técnicos.</div>
+        <ul class="agent-tasks">
+          <li>Arquitetura da plataforma (tech stack, infra)</li>
+          <li>Design de features (cotas, matching, tracking)</li>
+          <li>UX/UI da plataforma</li>
+          <li>API design para integrações</li>
+          <li>Technical roadmap por sprint</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-weekly">sprint planning</span>
+        </div>
+      </div>
+
+      <div class="agent-card purple">
+        <div class="agent-header">
+          <div class="agent-avatar purple">&#x1F4B0;</div>
+          <div>
+            <div class="agent-name">@cfo-ai</div>
+            <div class="agent-role">Chief Financial Strategist</div>
+          </div>
+        </div>
+        <div class="agent-desc">Modelo financeiro, unit economics, pricing strategy, projeções de receita, preparação para captação. O cérebro financeiro da empresa.</div>
+        <ul class="agent-tasks">
+          <li>Modelo financeiro completo (12-36 meses)</li>
+          <li>Unit economics por campanha, por vertical</li>
+          <li>Pricing strategy (cotas, comissão, SaaS)</li>
+          <li>Análise de break-even e runway</li>
+          <li>Preparação de materials para investidor</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-weekly">financial review</span>
+          <span class="tag tag-monthly">board report</span>
+        </div>
+      </div>
+
+      <div class="agent-card purple">
+        <div class="agent-header">
+          <div class="agent-avatar purple">&#x2696;</div>
+          <div>
+            <div class="agent-name">@legal</div>
+            <div class="agent-role">Legal & Compliance Strategist</div>
+          </div>
+        </div>
+        <div class="agent-desc">Tudo que envolve lei. Estrutura societária, contratos, termos de uso, CONAR, LGPD, propriedade intelectual, regulação de marketplace.</div>
+        <ul class="agent-tasks">
+          <li>Termos de uso e política de privacidade</li>
+          <li>Contrato marca-plataforma e creator-plataforma</li>
+          <li>Compliance CONAR (publicidade)</li>
+          <li>LGPD (tratamento de dados)</li>
+          <li>Estrutura societária e cap table</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-weekly">compliance check</span>
+          <span class="tag tag-ondemand">on demand</span>
+        </div>
+      </div>
+
+      <div class="agent-card purple">
+        <div class="agent-header">
+          <div class="agent-avatar purple">&#x1F52C;</div>
+          <div>
+            <div class="agent-name">@scientist</div>
+            <div class="agent-role">Data Science & Algorithm</div>
+          </div>
+        </div>
+        <div class="agent-desc">Dono dos algoritmos. Creator Score, matching creator-marca, detecção de fraude, pricing dinâmico de cotas, previsão de performance.</div>
+        <ul class="agent-tasks">
+          <li>Algoritmo de Creator Score</li>
+          <li>Modelo de matching creator-campanha</li>
+          <li>ML para detecção de fraude</li>
+          <li>Pricing dinâmico de cotas</li>
+          <li>Predição de performance de campanha</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-weekly">model review</span>
+        </div>
+      </div>
+
+      <div class="agent-card purple">
+        <div class="agent-header">
+          <div class="agent-avatar purple">&#x1F680;</div>
+          <div>
+            <div class="agent-name">@biz-dev</div>
+            <div class="agent-role">Business Development</div>
+          </div>
+        </div>
+        <div class="agent-desc">Parcerias estratégicas. Agências de publicidade, plataformas de pagamento, redes sociais, aceleradoras, investidores. Abre portas que agentes de venda não alcançam.</div>
+        <ul class="agent-tasks">
+          <li>Parcerias com agências digitais (canal de distribuição)</li>
+          <li>Integração com plataformas (TikTok, Meta, YouTube API)</li>
+          <li>Relacionamento com investidores e aceleradoras</li>
+          <li>Parcerias com gateways de pagamento</li>
+          <li>Estratégia de expansão geográfica</li>
+        </ul>
+        <div class="agent-tags">
+          <span class="tag tag-weekly">pipeline review</span>
+          <span class="tag tag-monthly">partner board</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════ -->
+<!-- ADVISORY BOARD                    -->
+<!-- ═════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Advisory Board</div>
+    <h2>10 mentes.<br><span class="grad">Cada uma com um propósito.</span></h2>
+    <p class="subtitle">Advisors não operam — eles pensam. Ativados on-demand quando precisa de perspectiva especializada. Reunião mensal do advisory completo.</p>
+
+    <div class="advisors-grid">
+
+      <div class="advisor-card">
+        <div class="adv-name">@hormozi</div>
+        <div class="adv-real">Inspirado em Alex Hormozi</div>
+        <div class="adv-why">Offer creation e value ladder. Como precificar cotas, como construir a oferta irrecusável para marcas e creators. O Grand Slam Offer da humaPubli.</div>
+        <div class="adv-focus" style="color: var(--green);">Pricing & Offer Design</div>
+      </div>
+
+      <div class="advisor-card">
+        <div class="adv-name">@thiel</div>
+        <div class="adv-real">Inspirado em Peter Thiel</div>
+        <div class="adv-why">Zero to one. Como construir monopólio legítimo. O sistema de cotas como vantagem competitiva incopiável. Qual vertical dominar primeiro.</div>
+        <div class="adv-focus" style="color: var(--blue);">Monopoly Strategy</div>
+      </div>
+
+      <div class="advisor-card">
+        <div class="adv-name">@chen</div>
+        <div class="adv-real">Inspirado em Andrew Chen</div>
+        <div class="adv-why">Autor de "The Cold Start Problem". Especialista em network effects e marketplaces. Como resolver o ovo-e-galinha e criar efeitos de rede defensáveis.</div>
+        <div class="adv-focus" style="color: var(--purple);">Network Effects & Cold Start</div>
+      </div>
+
+      <div class="advisor-card">
+        <div class="adv-name">@godin</div>
+        <div class="adv-real">Inspirado em Seth Godin</div>
+        <div class="adv-why">Permission marketing, tribes, purple cow. Como a humaPubli se posiciona como movimento, não como ferramenta. Brand como religião.</div>
+        <div class="adv-focus" style="color: var(--orange);">Brand & Positioning</div>
+      </div>
+
+      <div class="advisor-card">
+        <div class="adv-name">@cialdini</div>
+        <div class="adv-real">Inspirado em Robert Cialdini</div>
+        <div class="adv-why">Psicologia da persuasão. Como usar escassez (cotas limitadas), prova social (rankings), compromisso (skin in the game) para maximizar conversão.</div>
+        <div class="adv-focus" style="color: var(--pink);">Behavioral Psychology</div>
+      </div>
+
+      <div class="advisor-card">
+        <div class="adv-name">@damodaran</div>
+        <div class="adv-real">Inspirado em Aswath Damodaran</div>
+        <div class="adv-why">Dean of Valuation. Modelagem financeira, valuation de marketplace, métricas que investidores olham. Como apresentar os números pra captar.</div>
+        <div class="adv-focus" style="color: var(--green);">Valuation & Finance</div>
+      </div>
+
+      <div class="advisor-card">
+        <div class="adv-name">@naval</div>
+        <div class="adv-real">Inspirado em Naval Ravikant</div>
+        <div class="adv-why">Leverage sem capital. Code and media as leverage. Como a humaPubli pode escalar com pouquíssimo capital usando tecnologia e rede de creators.</div>
+        <div class="adv-focus" style="color: var(--cyan);">Leverage & Scale</div>
+      </div>
+
+      <div class="advisor-card">
+        <div class="adv-name">@mr-beast</div>
+        <div class="adv-real">Inspirado em MrBeast</div>
+        <div class="adv-why">O maior creator do mundo. Entende viralidade, retenção, thumbnail, hook. Como orientar creators a produzir conteúdo que performa de verdade.</div>
+        <div class="adv-focus" style="color: var(--red);">Virality & Content Strategy</div>
+      </div>
+
+      <div class="advisor-card">
+        <div class="adv-name">@icaro</div>
+        <div class="adv-real">Inspirado em Ícaro de Carvalho</div>
+        <div class="adv-why">O melhor copywriter do Brasil. Entende o creator brasileiro, o mercado BR, a psicologia do consumidor local. Copy que converte em português.</div>
+        <div class="adv-focus" style="color: var(--orange);">Copy & Brazilian Market</div>
+      </div>
+
+      <div class="advisor-card">
+        <div class="adv-name">@jurista</div>
+        <div class="adv-real">Especialista em Direito Digital BR</div>
+        <div class="adv-why">CONAR, CDC, Marco Civil, LGPD, regulação de marketplace. Garante que a humaPubli nasce legalmente blindada e escala sem risco jurídico.</div>
+        <div class="adv-focus" style="color: var(--yellow);">Legal & Regulation BR</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════ -->
+<!-- SQUADS                            -->
+<!-- ═════════════════════════════════ -->
+<section style="background: var(--bg-subtle);">
+  <div class="container">
+    <div class="section-label">Squads Cross-Funcionais</div>
+    <h2>5 squads.<br><span class="grad">Cada um com uma missão.</span></h2>
+    <p class="subtitle">Squads reúnem agentes de diferentes departamentos para resolver problemas específicos. Cada squad tem um líder, membros fixos e deliverables claros.</p>
+
+    <div class="squads-grid">
+
+      <div class="squad-card">
+        <h3>&#x1F3D7; Squad Foundation</h3>
+        <div class="squad-mission">"Construir a base legal, financeira e operacional pra empresa existir."</div>
+        <div class="squad-members">
+          <span class="squad-member">@ceo-ai (lead)</span>
+          <span class="squad-member">@cfo-ai</span>
+          <span class="squad-member">@legal</span>
+          <span class="squad-member">@thiel</span>
+          <span class="squad-member">@damodaran</span>
+        </div>
+        <div class="squad-deliverables">
+          <strong>Entregas:</strong> Modelo de negócio canvas, estrutura societária, cap table, modelo financeiro 36 meses, termos de uso, política de privacidade, contrato padrão marca/creator, estratégia de pricing.<br>
+          <strong>Cadência:</strong> Daily na fase 1, depois semanal.<br>
+          <strong>Duração:</strong> 4-6 semanas, depois on-demand.
+        </div>
+      </div>
+
+      <div class="squad-card">
+        <h3>&#x1F680; Squad Growth Engine</h3>
+        <div class="squad-mission">"Resolver o cold start e criar a máquina de crescimento."</div>
+        <div class="squad-members">
+          <span class="squad-member">@growth (lead)</span>
+          <span class="squad-member">@hunter</span>
+          <span class="squad-member">@magnet</span>
+          <span class="squad-member">@chen</span>
+          <span class="squad-member">@hormozi</span>
+          <span class="squad-member">@cialdini</span>
+        </div>
+        <div class="squad-deliverables">
+          <strong>Entregas:</strong> Estratégia de cold start, funil de aquisição marca, funil de aquisição creator, programa de referral, loops virais, playbook de outreach, case study templates.<br>
+          <strong>Cadência:</strong> Daily standup + weekly growth review.<br>
+          <strong>Duração:</strong> Permanente.
+        </div>
+      </div>
+
+      <div class="squad-card">
+        <h3>&#x1F3AF; Squad Product</h3>
+        <div class="squad-mission">"Transformar a visão em plataforma funcional."</div>
+        <div class="squad-members">
+          <span class="squad-member">@architect (lead)</span>
+          <span class="squad-member">@scientist</span>
+          <span class="squad-member">@campaign-ops</span>
+          <span class="squad-member">@mr-beast</span>
+        </div>
+        <div class="squad-deliverables">
+          <strong>Entregas:</strong> Arquitetura da plataforma, wireframes, MVP scope, algoritmo de matching, sistema de cotas, Creator Score v1, tracking engine, dashboard.<br>
+          <strong>Cadência:</strong> Sprint semanal.<br>
+          <strong>Duração:</strong> Permanente.
+        </div>
+      </div>
+
+      <div class="squad-card">
+        <h3>&#x1F6E1; Squad Trust & Safety</h3>
+        <div class="squad-mission">"Garantir que a plataforma é segura, justa e legal."</div>
+        <div class="squad-members">
+          <span class="squad-member">@compliance (lead)</span>
+          <span class="squad-member">@sentinel</span>
+          <span class="squad-member">@legal</span>
+          <span class="squad-member">@jurista</span>
+        </div>
+        <div class="squad-deliverables">
+          <strong>Entregas:</strong> Política de conteúdo, sistema de detecção de fraude, processo de dispute resolution, compliance CONAR, auditoria LGPD, playbook de brand safety.<br>
+          <strong>Cadência:</strong> Weekly review + alertas 24/7.<br>
+          <strong>Duração:</strong> Permanente.
+        </div>
+      </div>
+
+      <div class="squad-card">
+        <h3>&#x1F4B0; Squad Revenue</h3>
+        <div class="squad-mission">"Maximizar receita por campanha e lifetime value de marcas e creators."</div>
+        <div class="squad-members">
+          <span class="squad-member">@cfo-ai (lead)</span>
+          <span class="squad-member">@treasury</span>
+          <span class="squad-member">@hunter</span>
+          <span class="squad-member">@hormozi</span>
+          <span class="squad-member">@naval</span>
+        </div>
+        <div class="squad-deliverables">
+          <strong>Entregas:</strong> Pricing strategy, upsell para SaaS, otimização de comissão, projeção de receita, análise de churn, LTV modeling, estratégia de monetização por vertical.<br>
+          <strong>Cadência:</strong> Weekly + monthly deep dive.<br>
+          <strong>Duração:</strong> Permanente.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════ -->
+<!-- CADÊNCIA COMPLETA                 -->
+<!-- ═════════════════════════════════ -->
+<section>
+  <div class="container">
+    <div class="section-label">Cadência Operacional</div>
+    <h2>Quem faz o quê.<br><span class="grad">E quando.</span></h2>
+
+    <table class="cadence-table">
+      <thead>
+        <tr>
+          <th>Frequência</th>
+          <th>Ritual</th>
+          <th>Participantes</th>
+          <th>Output</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="freq" style="color:var(--green);">24/7</span></td>
+          <td>Monitoramento autônomo</td>
+          <td>@sentinel, @concierge, @radar, @compliance</td>
+          <td>Alertas em tempo real, ações automáticas</td>
+        </tr>
+        <tr>
+          <td><span class="freq" style="color:var(--blue);">Diário 7h</span></td>
+          <td>Morning Brief</td>
+          <td>@sentinel</td>
+          <td>Relatório de métricas das últimas 24h</td>
+        </tr>
+        <tr>
+          <td><span class="freq" style="color:var(--blue);">Diário 8h</span></td>
+          <td>Standup</td>
+          <td>@hunter, @magnet, @campaign-ops, @growth, @treasury</td>
+          <td>Progresso, blockers, prioridades do dia</td>
+        </tr>
+        <tr>
+          <td><span class="freq" style="color:var(--purple);">Segunda 9h</span></td>
+          <td>Strategy Weekly</td>
+          <td>@ceo-ai + todos os leads de squad</td>
+          <td>Decisões estratégicas, priorização, pivots</td>
+        </tr>
+        <tr>
+          <td><span class="freq" style="color:var(--purple);">Terça 10h</span></td>
+          <td>Growth Review</td>
+          <td>Squad Growth Engine</td>
+          <td>Métricas de crescimento, testes, otimizações</td>
+        </tr>
+        <tr>
+          <td><span class="freq" style="color:var(--purple);">Quarta 10h</span></td>
+          <td>Sprint Review</td>
+          <td>Squad Product</td>
+          <td>Features entregues, próximo sprint</td>
+        </tr>
+        <tr>
+          <td><span class="freq" style="color:var(--purple);">Quinta 10h</span></td>
+          <td>Revenue & Finance</td>
+          <td>Squad Revenue</td>
+          <td>Revenue report, unit economics, projeções</td>
+        </tr>
+        <tr>
+          <td><span class="freq" style="color:var(--purple);">Sexta 14h</span></td>
+          <td>Trust & Safety Review</td>
+          <td>Squad Trust & Safety</td>
+          <td>Incidents, compliance status, policy updates</td>
+        </tr>
+        <tr>
+          <td><span class="freq" style="color:var(--orange);">1ª segunda/mês</span></td>
+          <td>Board Review</td>
+          <td>Todos os agentes + advisors</td>
+          <td>Report executivo, OKRs, decisões macro</td>
+        </tr>
+        <tr>
+          <td><span class="freq" style="color:var(--orange);">15 do mês</span></td>
+          <td>Advisory Session</td>
+          <td>Advisors relevantes (sob demanda)</td>
+          <td>Perspectivas especializadas, curso corrections</td>
+        </tr>
+        <tr>
+          <td><span class="freq" style="color:var(--red);">Trimestral</span></td>
+          <td>Strategic Planning</td>
+          <td>@ceo-ai, @cfo-ai, founders</td>
+          <td>OKRs do próximo trimestre, budget allocation</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════ -->
+<!-- ATIVAÇÃO POR FASE                 -->
+<!-- ═════════════════════════════════ -->
+<section style="background: var(--bg-subtle);">
+  <div class="container">
+    <div class="section-label">Rollout por Fase</div>
+    <h2>Não ativa tudo de uma vez.<br><span class="grad">Cresce com a empresa.</span></h2>
+    <p class="subtitle">Cada fase da empresa ativa os agentes que precisa. Sem overhead, sem complexidade prematura.</p>
+
+    <div class="phases-grid">
+      <div class="phase-card">
+        <div class="phase-num">01</div>
+        <div class="phase-when p1">Fase 1 — Validação (Agora)</div>
+        <h3>6 agentes + 4 advisors</h3>
+        <ul>
+          <li><strong>@ceo-ai</strong> — Estratégia e decisões</li>
+          <li><strong>@cfo-ai</strong> — Modelo financeiro e pricing</li>
+          <li><strong>@legal</strong> — Estrutura jurídica base</li>
+          <li><strong>@hunter</strong> — Prospectar primeiras marcas</li>
+          <li><strong>@magnet</strong> — Recrutar primeiros creators</li>
+          <li><strong>@growth</strong> — Landing page, waitlist, social</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Advisors: @hormozi, @thiel, @chen, @jurista</li>
+          <li>Squad ativo: Foundation + Growth Engine</li>
+        </ul>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">02</div>
+        <div class="phase-when p2">Fase 2 — MVP (Mês 4-8)</div>
+        <h3>+ 5 agentes + 3 advisors</h3>
+        <ul>
+          <li><strong>@architect</strong> — Plataforma e tech</li>
+          <li><strong>@campaign-ops</strong> — Operar campanhas</li>
+          <li><strong>@sentinel</strong> — Monitoramento de métricas</li>
+          <li><strong>@treasury</strong> — Pagamentos e fluxo de caixa</li>
+          <li><strong>@concierge</strong> — Suporte automatizado</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Advisors: @godin, @cialdini, @mr-beast</li>
+          <li>Squads ativos: + Product, Revenue</li>
+        </ul>
+      </div>
+
+      <div class="phase-card">
+        <div class="phase-num">03</div>
+        <div class="phase-when p3">Fase 3 — Scale (Mês 9+)</div>
+        <h3>+ 5 agentes + 3 advisors</h3>
+        <ul>
+          <li><strong>@radar</strong> — Inteligência de mercado</li>
+          <li><strong>@compliance</strong> — Compliance automatizado</li>
+          <li><strong>@scientist</strong> — Algoritmos e ML</li>
+          <li><strong>@biz-dev</strong> — Parcerias enterprise</li>
+          <li>Equipe humana de account management</li>
+        </ul>
+        <hr class="divider">
+        <ul>
+          <li>Advisors: @damodaran, @naval, @icaro</li>
+          <li>Squads ativos: + Trust & Safety (todos)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════════════════════════ -->
+<!-- RESUMO EXECUTIVO                  -->
+<!-- ═════════════════════════════════ -->
+<section>
+  <div class="container" style="text-align: center;">
+    <div class="logo" style="font-size: 2rem; margin-bottom: 2rem;">humaPubli</div>
+    <h2>16 agentes. 10 advisors. 5 squads.<br><span class="grad">Uma empresa que nunca para.</span></h2>
+    <p style="color: var(--text-muted); font-size: 1.05rem; max-width: 500px; margin: 1.5rem auto 0; line-height: 1.7;">
+      Cada agente com função clara.<br>
+      Cada advisor com expertise única.<br>
+      Cada squad com missão e deadline.<br>
+      <br>
+      Tudo orquestrado. Tudo mensurável.<br>
+      <strong style="color: var(--text);">Tudo rodando 24/7.</strong>
+    </p>
+  </div>
+</section>
+
+<footer style="border-top: 1px solid var(--border); padding: 2rem; text-align: center;">
+  <div class="logo" style="font-size: 1rem; margin-bottom: 0.5rem;">humaPubli</div>
+  <p style="font-size: 0.65rem; color: var(--text-dim); letter-spacing: 0.1em;">ARQUITETURA ORGANIZACIONAL — DOCUMENTO INTERNO — FEV 2026</p>
+</footer>
+
+</body>
+</html>

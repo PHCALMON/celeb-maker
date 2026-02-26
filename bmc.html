@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>humaPubli — Business Model Canvas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07070a;
+    --bg-subtle: #0c0c11;
+    --bg-card: #111118;
+    --bg-card-hover: #16161f;
+    --border: #1e1e2a;
+    --border-hover: #2a2a3a;
+    --text: #f0f0f5;
+    --text-muted: #8888a0;
+    --text-dim: #55556a;
+    --gradient: linear-gradient(135deg, #ff6b9d, #c850c0, #ff6b35);
+    --green: #00e676;
+    --green-dim: rgba(0, 230, 118, 0.1);
+    --blue: #448aff;
+    --blue-dim: rgba(68, 138, 255, 0.1);
+    --orange: #ff9100;
+    --orange-dim: rgba(255, 145, 0, 0.1);
+    --purple: #b388ff;
+    --purple-dim: rgba(179, 136, 255, 0.1);
+    --red: #ff5252;
+    --red-dim: rgba(255, 82, 82, 0.1);
+    --yellow: #ffd740;
+    --yellow-dim: rgba(255, 215, 64, 0.1);
+    --cyan: #18ffff;
+    --cyan-dim: rgba(24, 255, 255, 0.1);
+    --pink: #ff6b9d;
+    --pink-dim: rgba(255, 107, 157, 0.1);
+    --glow: rgba(200, 80, 192, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+  /* Header */
+  .header {
+    padding: 60px 0 40px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 800;
+    font-size: 2.4rem;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .doc-title {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    font-weight: 400;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .meta-bar {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+  }
+  .meta-bar span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .badge-draft { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(255,145,0,0.2); }
+  .badge-media { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(255,215,64,0.2); }
+
+  /* Confidence tags */
+  .conf { font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+  .conf-alta { background: var(--green-dim); color: var(--green); }
+  .conf-media { background: var(--yellow-dim); color: var(--yellow); }
+  .conf-baixa { background: var(--red-dim); color: var(--red); }
+  .conf-hipotese { background: var(--purple-dim); color: var(--purple); }
+
+  /* Sections */
+  .section {
+    padding: 48px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .section-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .section-subtitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+    margin: 24px 0 12px;
+    padding-left: 12px;
+    border-left: 3px solid;
+    border-image: var(--gradient) 1;
+  }
+
+  /* Tables */
+  .table-wrap { overflow-x: auto; margin: 16px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  th {
+    text-align: left;
+    padding: 12px 16px;
+    background: var(--bg-subtle);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+  }
+  tr:hover td { background: var(--bg-card); }
+
+  /* Cards */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.2s;
+  }
+  .card:hover {
+    border-color: var(--border-hover);
+    background: var(--bg-card-hover);
+  }
+  .card-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .card-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .card-desc {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Code blocks */
+  .code-block {
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    overflow-x: auto;
+    margin: 16px 0;
+    white-space: pre;
+  }
+
+  /* Callout */
+  .callout {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid;
+    border-radius: 0 8px 8px 0;
+    padding: 16px 20px;
+    margin: 20px 0;
+    font-size: 0.85rem;
+  }
+  .callout-warning { border-left-color: var(--orange); }
+  .callout-info { border-left-color: var(--blue); }
+  .callout-strategy { border-left-color: var(--purple); }
+  .callout-urgent { border-left-color: var(--red); background: var(--red-dim); }
+  .callout-label {
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+  .callout-warning .callout-label { color: var(--orange); }
+  .callout-info .callout-label { color: var(--blue); }
+  .callout-strategy .callout-label { color: var(--purple); }
+  .callout-urgent .callout-label { color: var(--red); }
+
+  /* Checklist */
+  .checklist { list-style: none; margin: 16px 0; }
+  .checklist li {
+    padding: 8px 0 8px 28px;
+    position: relative;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    border-bottom: 1px solid rgba(30,30,42,0.5);
+  }
+  .checklist li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border-hover);
+    border-radius: 4px;
+  }
+
+  /* North Star */
+  .north-star {
+    text-align: center;
+    padding: 32px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin: 16px 0;
+  }
+  .north-star-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+  .north-star-metric {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.4;
+  }
+  .north-star-sub {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+
+  /* Naming section */
+  .name-option {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 12px 0;
+    transition: all 0.2s;
+  }
+  .name-option:hover { border-color: var(--border-hover); transform: translateX(4px); }
+  .name-word {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+  }
+  .name-meaning {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .name-usage {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--cyan);
+    padding: 6px 12px;
+    background: var(--cyan-dim);
+    border-radius: 6px;
+    display: inline-block;
+    margin: 4px 4px 4px 0;
+  }
+  .name-pros {
+    font-size: 0.78rem;
+    color: var(--green);
+    margin-top: 8px;
+  }
+  .name-cons {
+    font-size: 0.78rem;
+    color: var(--red);
+    margin-top: 4px;
+  }
+  .name-verdict {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 8px;
+  }
+  .verdict-top { background: var(--green-dim); color: var(--green); border: 1px solid rgba(0,230,118,0.3); }
+  .verdict-good { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(68,138,255,0.3); }
+  .verdict-ok { background: var(--yellow-dim); color: var(--yellow); border: 1px solid rgba(255,215,64,0.3); }
+  .verdict-risk { background: var(--red-dim); color: var(--red); border: 1px solid rgba(255,82,82,0.3); }
+
+  /* Timeline */
+  .timeline { margin: 20px 0; }
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(30,30,42,0.5);
+  }
+  .timeline-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--border-hover);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+  }
+  .timeline-content { }
+  .timeline-action { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
+  .timeline-meta { font-size: 0.75rem; color: var(--text-dim); }
+
+  /* Footer */
+  .footer {
+    padding: 40px 0;
+    text-align: center;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+  }
+  .footer-line { margin: 4px 0; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header { padding: 40px 0 30px; }
+    .logo { font-size: 1.8rem; }
+    .section { padding: 32px 0; }
+    .section-title { font-size: 1.3rem; }
+    .card-grid { grid-template-columns: 1fr; }
+    .meta-bar { flex-direction: column; align-items: center; gap: 8px; }
+    table { font-size: 0.78rem; }
+    th, td { padding: 8px 10px; }
+    .name-word { font-size: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">humaPubli</div>
+    <div class="doc-title">Business Model Canvas</div>
+    <div class="meta-bar">
+      <span>Squad Foundation</span>
+      <span>|</span>
+      <span>@ceo-ai + @cfo-ai + @legal-hp + @thiel</span>
+      <span>|</span>
+      <span>26 Fev 2026</span>
+      <span><span class="badge badge-draft">Draft v1</span></span>
+      <span><span class="badge badge-media">Confianca Media</span></span>
+    </div>
+  </div>
+
+  <!-- 1. PROPOSTA DE VALOR -->
+  <div class="section">
+    <div class="section-number">01</div>
+    <div class="section-title">Proposta de Valor</div>
+
+    <div class="section-subtitle">Para Marcas (Demand Side)</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Proposta</th><th>Dor que Resolve</th><th>Confianca</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Publicidade autentica via creators reais</td>
+            <td>"Gastamos em celebridade e o publico pula"</td>
+            <td><span class="conf conf-alta">ALTA</span> Dor validada (65% skip rate)</td>
+          </tr>
+          <tr>
+            <td>Performance-based (paga so pelo resultado)</td>
+            <td>"Pagamos upfront e torcemos"</td>
+            <td><span class="conf conf-alta">ALTA</span> Modelo comprovado em afiliados</td>
+          </tr>
+          <tr>
+            <td>Centenas de pecas de conteudo por campanha</td>
+            <td>"Temos 1 peca cara que precisa performar sozinha"</td>
+            <td><span class="conf conf-media">MEDIA</span> Depende de supply de creators</td>
+          </tr>
+          <tr>
+            <td>UGC reutilizavel em ads proprios</td>
+            <td>"Precisamos de conteudo autentico para ads"</td>
+            <td><span class="conf conf-media">MEDIA</span> Precisa validar interesse</td>
+          </tr>
+          <tr>
+            <td>Dashboard de ROI por creator</td>
+            <td>"Nao sei quanto meu influencer vendeu"</td>
+            <td><span class="conf conf-alta">ALTA</span> Dor universal no mercado</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section-subtitle">Para Creators (Supply Side)</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Proposta</th><th>Dor que Resolve</th><th>Confianca</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Monetizar conteudo sem 100K seguidores</td>
+            <td>"So quem e grande consegue publi"</td>
+            <td><span class="conf conf-alta">ALTA</span> Micro-creators submonetizados</td>
+          </tr>
+          <tr>
+            <td>Liberdade criativa total</td>
+            <td>"Briefing engessado mata meu estilo"</td>
+            <td><span class="conf conf-alta">ALTA</span> Queixa recorrente</td>
+          </tr>
+          <tr>
+            <td>Meritocracia por performance</td>
+            <td>"Ganho o mesmo independente do resultado"</td>
+            <td><span class="conf conf-media">MEDIA</span> Modelo novo, validar aceitacao</td>
+          </tr>
+          <tr>
+            <td>Recompensa proporcional ao resultado</td>
+            <td>"Recebo permuta ou valor fixo baixo"</td>
+            <td><span class="conf conf-alta">ALTA</span> Performance-based e atrativo</td>
+          </tr>
+          <tr>
+            <td>Creator Score (reputacao portavel)</td>
+            <td>"Cada marca que trabalho e do zero"</td>
+            <td><span class="conf conf-baixa">BAIXA</span> Conceito novo, validar</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2. SEGMENTOS -->
+  <div class="section">
+    <div class="section-number">02</div>
+    <div class="section-title">Segmentos de Clientes</div>
+
+    <div class="section-subtitle">Marcas (Quem Paga)</div>
+    <div class="code-block">PHASE 1 (Validacao):
+├── PMEs locais (restaurantes, academias, lojas, clinicas)
+├── Budget marketing: R$ 2K-20K/mes
+├── Localizacao: Sao Paulo (network pessoal)
+└── Criterio: Ja usa Instagram, ainda nao investiu em influencer
+
+PHASE 2 (MVP):
+├── Marcas D2C (e-commerce, DNVB)
+├── Budget marketing: R$ 20K-100K/mes
+├── Nacional
+└── Criterio: Ja testou influencer, frustrado com ROI
+
+PHASE 3 (Scale):
+├── Marcas nacionais + agencias de publicidade
+├── Budget marketing: R$ 100K+/mes
+└── Criterio: Busca UGC escalavel e mensuravel</div>
+
+    <div class="section-subtitle">Creators (Quem Produz)</div>
+    <div class="code-block">PHASE 1: Micro-creators (500-10K seguidores), nicho definido
+PHASE 2: Mid-creators (10K-100K), engagement alto
+PHASE 3: Power creators (100K+), profissionais</div>
+  </div>
+
+  <!-- 3. CANAIS -->
+  <div class="section">
+    <div class="section-number">03</div>
+    <div class="section-title">Canais</div>
+
+    <div class="card-grid">
+      <div>
+        <div class="section-subtitle">Aquisicao de Marcas</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Canal</th><th>Fase</th><th>Prioridade</th></tr></thead>
+            <tbody>
+              <tr><td>Network pessoal dos founders</td><td>1</td><td><span class="conf conf-alta">IMEDIATA</span></td></tr>
+              <tr><td>Cold outreach (email/LinkedIn/DM)</td><td>1-2</td><td><span class="conf conf-media">ALTA</span></td></tr>
+              <tr><td>Case studies + content marketing</td><td>2</td><td>MEDIA</td></tr>
+              <tr><td>Parcerias com agencias digitais</td><td>2-3</td><td>MEDIA</td></tr>
+              <tr><td>Inbound (SEO, ads)</td><td>3</td><td>FUTURA</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="section-subtitle">Aquisicao de Creators</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Canal</th><th>Fase</th><th>Prioridade</th></tr></thead>
+            <tbody>
+              <tr><td>DM personalizado (Instagram/TikTok)</td><td>1</td><td><span class="conf conf-alta">IMEDIATA</span></td></tr>
+              <tr><td>Referral (creator indica creator)</td><td>1-2</td><td><span class="conf conf-media">ALTA</span></td></tr>
+              <tr><td>Conteudo proprio da humaPubli</td><td>1-2</td><td><span class="conf conf-media">ALTA</span></td></tr>
+              <tr><td>Parcerias com coletivos</td><td>2</td><td>MEDIA</td></tr>
+              <tr><td>Ads pagos</td><td>3</td><td>FUTURA</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. RELACIONAMENTO -->
+  <div class="section">
+    <div class="section-number">04</div>
+    <div class="section-title">Relacionamento com Clientes</div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">Com Marcas</div>
+        <div class="card-value">High-touch → Self-serve</div>
+        <div class="card-desc">
+          <strong>Phase 1:</strong> White-glove — founders operam pessoalmente<br>
+          <strong>Phase 2:</strong> Onboarding guiado + suporte por chat<br>
+          <strong>Phase 3:</strong> Self-serve para PMEs, AM dedicado para enterprise
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Com Creators</div>
+        <div class="card-value">Comunidade → Gamificacao</div>
+        <div class="card-desc">
+          <strong>Phase 1:</strong> Grupo fechado WhatsApp<br>
+          <strong>Phase 2:</strong> Onboarding automatizado + grupo ativo<br>
+          <strong>Phase 3:</strong> Creator Score, rankings, badges, niveis
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. FONTES DE RECEITA -->
+  <div class="section">
+    <div class="section-number">05</div>
+    <div class="section-title">Fontes de Receita</div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">50-60% da receita</div>
+        <div class="card-value" style="color: var(--green);">Comissao por Transacao</div>
+        <div class="card-desc">15-20% sobre recompensas marca → creator</div>
+      </div>
+      <div class="card">
+        <div class="card-label">10-20% da receita</div>
+        <div class="card-value" style="color: var(--orange);">Tokens Nao Utilizados</div>
+        <div class="card-desc">Creators que adquirem acesso mas nao postam (~15-25%)</div>
+      </div>
+      <div class="card">
+        <div class="card-label">15-25% da receita — Phase 2+</div>
+        <div class="card-value" style="color: var(--blue);">SaaS para Marcas</div>
+        <div class="card-desc">Dashboard avancado, analytics, UGC library (R$499-2.999/mes)</div>
+      </div>
+      <div class="card">
+        <div class="card-label">5-10% da receita — Phase 2+</div>
+        <div class="card-value" style="color: var(--purple);">Campanhas Destacadas</div>
+        <div class="card-desc">Marca paga extra para posicao premium no marketplace</div>
+      </div>
+    </div>
+
+    <div class="section-subtitle">Precificacao <span class="conf conf-hipotese">HIPOTESE</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tier</th><th>Preco Unitario</th><th>Unidades/Campanha</th><th>Budget Min. Marca</th></tr></thead>
+        <tbody>
+          <tr><td>PME Local</td><td>R$ 15-25</td><td>20-50</td><td>R$ 1.000</td></tr>
+          <tr><td>Marca Media</td><td>R$ 25-50</td><td>50-200</td><td>R$ 5.000</td></tr>
+          <tr><td>Enterprise</td><td>R$ 50-100</td><td>200-1.000</td><td>R$ 20.000</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">Atencao @cfo-ai</div>
+      Estes precos sao hipoteses. Precisam ser validados com: (1) willingness-to-pay de creators reais, (2) elasticidade de preco via teste A/B, (3) analise de break-even por campanha. NAO basear decisoes nestes numeros sem validacao.
+    </div>
+  </div>
+
+  <!-- 6. RECURSOS CHAVE -->
+  <div class="section">
+    <div class="section-number">06</div>
+    <div class="section-title">Recursos Chave</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Recurso</th><th>Descricao</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Plataforma tecnologica</td><td>Marketplace web/app</td><td><span class="conf conf-baixa">Phase 2</span></td></tr>
+          <tr><td>Algoritmo de matching</td><td>Creator ↔ Campanha</td><td><span class="conf conf-baixa">Phase 2</span></td></tr>
+          <tr><td>Sistema de tracking</td><td>Views, cliques, conversoes</td><td><span class="conf conf-baixa">Phase 2</span></td></tr>
+          <tr><td><strong>Network de founders</strong></td><td>Acesso a primeiras marcas e creators</td><td><span class="conf conf-alta">EXISTE</span></td></tr>
+          <tr><td><strong>Capacidade audiovisual</strong></td><td>Producao de conteudo da marca humaPubli</td><td><span class="conf conf-alta">EXISTE</span></td></tr>
+          <tr><td>Dados de performance</td><td>Historico de campanhas</td><td><span class="conf conf-baixa">Gerar na Phase 1</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-strategy">
+      <div class="callout-label">Nota Estrategica — @thiel</div>
+      "O recurso mais valioso da Phase 1 nao e tecnologia — e o NETWORK dos founders e a capacidade de operar white-glove. Tecnologia e um multiplicador que so faz sentido quando o modelo esta validado manualmente."
+    </div>
+  </div>
+
+  <!-- 7. ATIVIDADES CHAVE -->
+  <div class="section">
+    <div class="section-number">07</div>
+    <div class="section-title">Atividades Chave</div>
+
+    <div class="section-subtitle">Phase 1 — Validacao Manual (Agora)</div>
+    <ul class="checklist">
+      <li>Recrutar 5-10 marcas do network pessoal</li>
+      <li>Recrutar 30-50 creators via DM personalizado</li>
+      <li>Operar 5-10 campanhas manualmente (WhatsApp + planilha + Pix)</li>
+      <li>Documentar unit economics reais de cada campanha</li>
+      <li>Coletar NPS de marcas e creators</li>
+      <li>Gerar 3-5 case studies com dados reais</li>
+      <li>Validar willingness-to-pay com creators reais</li>
+    </ul>
+
+    <div class="section-subtitle">Phase 2 — MVP</div>
+    <ul class="checklist">
+      <li>Desenvolver plataforma web (MVP)</li>
+      <li>Implementar sistema de acesso e pagamentos</li>
+      <li>Implementar tracking basico (link + cupom)</li>
+      <li>Onboarding automatizado</li>
+      <li>Dashboard para marcas e creators</li>
+    </ul>
+
+    <div class="section-subtitle">Phase 3 — Scale</div>
+    <ul class="checklist">
+      <li>Algoritmo de matching creator-campanha</li>
+      <li>Creator Score v1</li>
+      <li>ML para deteccao de fraude</li>
+      <li>App mobile</li>
+      <li>API para agencias</li>
+    </ul>
+  </div>
+
+  <!-- 8. PARCERIAS -->
+  <div class="section">
+    <div class="section-number">08</div>
+    <div class="section-title">Parcerias Chave</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Parceiro</th><th>Valor</th><th>Fase</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Gateway de pagamento (Stripe, Pagar.me, Asaas)</td><td>Processar pagamentos e recompensas</td><td>2</td><td>A definir</td></tr>
+          <tr><td>APIs de redes sociais (Meta, TikTok, YouTube)</td><td>Tracking de metricas</td><td>2</td><td>A definir</td></tr>
+          <tr><td>Agencias digitais</td><td>Canal de distribuicao para marcas</td><td>2-3</td><td>A definir</td></tr>
+          <tr><td><strong>Escritorio de advocacia</strong></td><td>Validacao de contratos e compliance</td><td>1</td><td><span class="conf conf-baixa">URGENTE</span></td></tr>
+          <tr><td><strong>Contador especializado em marketplace</strong></td><td>Estrutura tributaria</td><td>1</td><td><span class="conf conf-baixa">URGENTE</span></td></tr>
+          <tr><td>Coletivos de creators</td><td>Canal de supply</td><td>1-2</td><td>A prospectar</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 9. CUSTOS -->
+  <div class="section">
+    <div class="section-number">09</div>
+    <div class="section-title">Estrutura de Custos</div>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-label">Phase 1 — Validacao</div>
+        <div class="card-value" style="color: var(--green);">R$ 500-1.100/mes</div>
+        <div class="card-desc">
+          Dominios: R$ 15-30<br>
+          Hospedagem: R$ 0 (GitHub Pages)<br>
+          Ferramentas: R$ 0-50<br>
+          Contabilidade: R$ 500-1.000<br>
+          <strong>+ R$ 2-5K setup</strong> (advocacia inicial)
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-label">Phase 2 — MVP</div>
+        <div class="card-value" style="color: var(--orange);">R$ 3.500-8.500/mes</div>
+        <div class="card-desc">
+          Infra tech: R$ 500-2.000<br>
+          Gateway: 2-4% do GMV<br>
+          SaaS tools: R$ 500-1.500<br>
+          Advocacia/contabilidade: R$ 1-2K<br>
+          Marketing: R$ 1-3K
+        </div>
+      </div>
+    </div>
+
+    <div class="section-subtitle">Custos Variaveis</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Item</th><th>Custo</th><th>Escala</th></tr></thead>
+        <tbody>
+          <tr><td>Processamento de pagamento</td><td>2-4% por transacao</td><td>Linear com GMV</td></tr>
+          <tr><td>CAC Creator</td><td><span class="conf conf-hipotese">NAO VERIFICADO</span></td><td>Medir na Phase 1</td></tr>
+          <tr><td>CAC Marca</td><td><span class="conf conf-hipotese">NAO VERIFICADO</span></td><td>Medir na Phase 1</td></tr>
+          <tr><td>Suporte/operacao por campanha</td><td><span class="conf conf-hipotese">NAO VERIFICADO</span></td><td>Medir na Phase 1</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 10. KPIs -->
+  <div class="section">
+    <div class="section-number">10</div>
+    <div class="section-title">Metricas Chave (KPIs)</div>
+
+    <div class="north-star">
+      <div class="north-star-label">North Star Metric</div>
+      <div class="north-star-metric">Campanhas completadas com resultado positivo para ambos os lados</div>
+      <div class="north-star-sub">marca satisfeita + creator recompensado acima do investimento</div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Area</th><th>Metrica</th><th>Meta Phase 1</th><th>Confianca</th></tr></thead>
+        <tbody>
+          <tr><td>Supply</td><td>Creators ativos</td><td>30-50</td><td><span class="conf conf-media">MEDIA</span></td></tr>
+          <tr><td>Demand</td><td>Marcas ativas</td><td>5-10</td><td><span class="conf conf-media">MEDIA</span></td></tr>
+          <tr><td>Liquidez</td><td>% campanhas com creators suficientes</td><td>&gt;80%</td><td><span class="conf conf-baixa">BAIXA</span></td></tr>
+          <tr><td>Ativacao</td><td>Signup → primeiro acesso adquirido</td><td>&gt;30%</td><td><span class="conf conf-baixa">BAIXA</span></td></tr>
+          <tr><td>Retencao</td><td>Creator faz 2+ campanhas</td><td>&gt;50%</td><td><span class="conf conf-baixa">BAIXA</span></td></tr>
+          <tr><td>Economia</td><td>Contribution margin por campanha</td><td>&gt;0 (positiva)</td><td><span class="conf conf-baixa">BAIXA</span></td></tr>
+          <tr><td>Satisfacao</td><td>NPS marcas / NPS creators</td><td>&gt;40</td><td><span class="conf conf-baixa">BAIXA</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-info">
+      <div class="callout-label">Nota</div>
+      Metas da Phase 1 sao HIPOTESES. Serao ajustadas com dados reais apos as primeiras 10 campanhas.
+    </div>
+  </div>
+
+  <!-- NAMING BRAINSTORM -->
+  <div class="section">
+    <div class="section-number">++</div>
+    <div class="section-title">Naming: Como Chamar a "Cota"?</div>
+
+    <div class="callout callout-warning">
+      <div class="callout-label">Contexto</div>
+      O mecanismo central da humaPubli e o creator adquirir acesso a uma campanha de marca. "Cota" tem risco juridico (conotacao de investimento — CVM). Precisamos de um nome que transmita: <strong>acesso, desbloqueio, participacao ativa</strong> — e que vire vocabulario natural entre creators.
+    </div>
+
+    <div class="name-option">
+      <div class="name-word" style="background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">PASS</div>
+      <div class="name-meaning">Passe de acesso. Analogia com backstage pass, boarding pass.</div>
+      <div class="name-usage">"Garanti meu pass da Nike"</div>
+      <div class="name-usage">"Peguei 3 passes esse mes"</div>
+      <div class="name-usage">"Tem pass novo da Adidas, bora?"</div>
+      <div class="name-pros">+ Sensacao de exclusividade e acesso VIP</div>
+      <div class="name-pros">+ Curto, facil de falar, universal</div>
+      <div class="name-pros">+ Zero risco juridico</div>
+      <div class="name-pros">+ Funciona em portugues e ingles</div>
+      <div class="name-cons">- Generico, outras plataformas podem usar</div>
+      <div class="name-verdict verdict-top">FAVORITO</div>
+    </div>
+
+    <div class="name-option">
+      <div class="name-word" style="color: var(--cyan);">KEY</div>
+      <div class="name-meaning">Chave que desbloqueia campanhas. Metafora de abrir portas.</div>
+      <div class="name-usage">"Peguei a key da campanha"</div>
+      <div class="name-usage">"Soltaram 50 keys — corre!"</div>
+      <div class="name-usage">"Minha key ja ta ativa"</div>
+      <div class="name-pros">+ Forte sensacao de desbloqueio</div>
+      <div class="name-pros">+ Visual icone poderoso (chave)</div>
+      <div class="name-pros">+ Cultura gamer: "key de acesso" e natural</div>
+      <div class="name-pros">+ Escassez implicita: "so tem X keys"</div>
+      <div class="name-cons">- Associacao com pirataria de software (serial key)</div>
+      <div class="name-verdict verdict-top">FAVORITO</div>
+    </div>
+
+    <div class="name-option">
+      <div class="name-word" style="color: var(--purple);">PLUG</div>
+      <div class="name-meaning">Plugar-se na campanha. Giria BR = conexao, link.</div>
+      <div class="name-usage">"Me pluguei na campanha da Coca"</div>
+      <div class="name-usage">"Comprei meu plug"</div>
+      <div class="name-usage">"Tem 30 plugs disponiveis"</div>
+      <div class="name-pros">+ Muito natural na linguagem jovem BR</div>
+      <div class="name-pros">+ Sensacao de "conectar-se", participar ativamente</div>
+      <div class="name-pros">+ Unico — ninguem usa "plug" como unidade de marketplace</div>
+      <div class="name-cons">- "Plug" em giria pode ter conotacao de traficante em EN</div>
+      <div class="name-cons">- Menos intuitivo pra publico 30+</div>
+      <div class="name-verdict verdict-good">FORTE</div>
+    </div>
+
+    <div class="name-option">
+      <div class="name-word" style="color: var(--orange);">DROP</div>
+      <div class="name-meaning">Como drops de streetwear/NFT. A marca "dropa" uma campanha.</div>
+      <div class="name-usage">"O drop da Adidas saiu!"</div>
+      <div class="name-usage">"Entrei no drop antes de esgotar"</div>
+      <div class="name-usage">"3 drops novos essa semana"</div>
+      <div class="name-pros">+ Hype e urgencia implicita</div>
+      <div class="name-pros">+ Cultura streetwear/Gen Z</div>
+      <div class="name-pros">+ Funciona como verbo: "dropou campanha nova"</div>
+      <div class="name-cons">- Pode confundir com lancamento de produto (product drop)</div>
+      <div class="name-cons">- Mais pro nome da CAMPANHA do que do acesso do creator</div>
+      <div class="name-verdict verdict-good">FORTE</div>
+    </div>
+
+    <div class="name-option">
+      <div class="name-word" style="color: var(--green);">TICKET</div>
+      <div class="name-meaning">Ingresso para participar. Simples, direto.</div>
+      <div class="name-usage">"Comprei meu ticket"</div>
+      <div class="name-usage">"Tem ticket disponivel?"</div>
+      <div class="name-usage">"Meu ticket ja deu retorno"</div>
+      <div class="name-pros">+ Universalmente entendido</div>
+      <div class="name-pros">+ Zero risco juridico</div>
+      <div class="name-pros">+ Familiar: ingresso, entrada</div>
+      <div class="name-cons">- Generico demais, nao tem personalidade</div>
+      <div class="name-cons">- Nao cria identidade propria da humaPubli</div>
+      <div class="name-verdict verdict-ok">SEGURO</div>
+    </div>
+
+    <div class="name-option">
+      <div class="name-word" style="color: var(--yellow);">COTA</div>
+      <div class="name-meaning">Cota de publicidade/marketing. Original.</div>
+      <div class="name-usage">"Comprei minha cota"</div>
+      <div class="name-usage">"50 cotas disponiveis"</div>
+      <div class="name-pros">+ Faz sentido no contexto de marketing (cotas de midia)</div>
+      <div class="name-pros">+ Indica valor proporcional</div>
+      <div class="name-cons">- Risco CVM: conotacao de investimento/valores mobiliarios</div>
+      <div class="name-cons">- "Cota de consorcio" e associacao negativa</div>
+      <div class="name-cons">- @jurista recomenda evitar</div>
+      <div class="name-verdict verdict-risk">RISCO JURIDICO</div>
+    </div>
+
+    <div class="callout callout-strategy">
+      <div class="callout-label">Recomendacao estrategica</div>
+      <strong>PASS</strong> ou <strong>KEY</strong> sao os mais fortes. Ambos transmitem desbloqueio/acesso, sao curtos, e funcionam como verbo natural. <strong>DROP</strong> pode ser o nome da CAMPANHA ("a marca dropou uma campanha") enquanto o acesso do creator e o <strong>pass</strong> ou a <strong>key</strong>. Combinar: "Dropou campanha nova da Nike — garanta seu pass!" cria narrativa poderosa.<br><br>
+      <strong>Decisao final: founders.</strong> Testar com 10 creators reais antes de fixar.
+    </div>
+  </div>
+
+  <!-- QUESTOES ABERTAS -->
+  <div class="section">
+    <div class="section-number">!!</div>
+    <div class="section-title">Questoes Abertas (Decisao dos Founders)</div>
+
+    <div class="callout callout-urgent">
+      <div class="callout-label">1. Estrutura Juridica — URGENTE</div>
+      <strong>Tipo societario:</strong> LTDA ou SLU? (Depende do numero de socios)<br>
+      <strong>Regime tributario:</strong> Simples Nacional (se elegivel) ou Lucro Presumido?<br>
+      <strong>A unidade de acesso e legalmente o que?</strong> Taxa de servico? Deposito? Antecipacao?<br>
+      <strong>Acao:</strong> Consultar advogado + contador ANTES de operar
+    </div>
+
+    <div class="callout callout-urgent">
+      <div class="callout-label">2. Primeiro Nicho</div>
+      @thiel recomenda dominar um nicho micro antes de expandir.<br>
+      <strong>Opcoes:</strong> Gastronomia SP? Fitness? Beleza? Tech?<br>
+      <strong>Criterio:</strong> Onde os founders tem mais network + mais creators ativos<br>
+      <strong>Acao:</strong> Founders decidem com base em network mapping
+    </div>
+
+    <div class="callout callout-urgent">
+      <div class="callout-label">3. Pricing</div>
+      R$15? R$25? R$35? R$50? Precisa testar com creators reais.<br>
+      <strong>Acao:</strong> Perguntar para 20 creators: "Quanto voce pagaria para participar de uma campanha com potencial de ganhar X?"
+    </div>
+
+    <div class="callout callout-urgent">
+      <div class="callout-label">4. Divisao Societaria (Cap Table)</div>
+      Quem sao os socios? Qual % cada um? Vesting? Cliff?<br>
+      <strong>Acao:</strong> Definir entre founders + formalizar em acordo de socios
+    </div>
+  </div>
+
+  <!-- PROXIMOS PASSOS -->
+  <div class="section">
+    <div class="section-number">→</div>
+    <div class="section-title">Proximos Passos Imediatos</div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-num">1</div>
+        <div class="timeline-content">
+          <div class="timeline-action">Consultar advogado para estrutura juridica</div>
+          <div class="timeline-meta">Founders | Semana 1 | Sem dependencia</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-num">2</div>
+        <div class="timeline-content">
+          <div class="timeline-action">Consultar contador para regime tributario</div>
+          <div class="timeline-meta">Founders | Semana 1 | Sem dependencia</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-num">3</div>
+        <div class="timeline-content">
+          <div class="timeline-action">Definir cap table / acordo de socios</div>
+          <div class="timeline-meta">Founders | Semana 1 | Sem dependencia</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-num">4</div>
+        <div class="timeline-content">
+          <div class="timeline-action">Escolher nicho vertical para Phase 1</div>
+          <div class="timeline-meta">Founders + @thiel | Semana 1 | Sem dependencia</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-num">5</div>
+        <div class="timeline-content">
+          <div class="timeline-action">Mapear 10 marcas do network pessoal</div>
+          <div class="timeline-meta">@hunter | Semana 2 | Depende de #4</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-num">6</div>
+        <div class="timeline-content">
+          <div class="timeline-action">Mapear 50 creators do nicho escolhido</div>
+          <div class="timeline-meta">@magnet | Semana 2 | Depende de #4</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-num">7</div>
+        <div class="timeline-content">
+          <div class="timeline-action">Validar pricing com 20 creators reais</div>
+          <div class="timeline-meta">@magnet + @cfo-ai | Semana 2-3 | Depende de #6</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-num">8</div>
+        <div class="timeline-content">
+          <div class="timeline-action">Operar primeira campanha manual</div>
+          <div class="timeline-meta">Founders | Semana 3-4 | Depende de #5, #6, #7</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-num">9</div>
+        <div class="timeline-content">
+          <div class="timeline-action">Documentar unit economics reais</div>
+          <div class="timeline-meta">@cfo-ai | Apos campanha #8</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-num">10</div>
+        <div class="timeline-content">
+          <div class="timeline-action">Gerar primeiro case study</div>
+          <div class="timeline-meta">@hunter | Apos #8 e #9</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-line">Squad Foundation | @ceo-ai + @cfo-ai + @legal-hp + @thiel</div>
+    <div class="footer-line">Versao 1.0 Draft | 26 Fev 2026</div>
+    <div class="footer-line" style="margin-top: 8px; color: var(--orange);">Todo dado marcado como [HIPOTESE], [NAO VERIFICADO] ou [BAIXA CONFIANCA] REQUER validacao antes de uso em decisoes.</div>
+    <div class="footer-line" style="margin-top: 16px;">
+      <span style="background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Montserrat', sans-serif; font-weight: 800;">humaPubli</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

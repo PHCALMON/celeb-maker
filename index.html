@@ -122,6 +122,7 @@
     display: flex;
     align-items: center;
     padding-top: 60px;
+    padding-bottom: 2rem;
   }
   .hero-content {
     text-align: center;
@@ -532,6 +533,112 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* ── Section Images ── */
+  .section-image {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-image-wrap {
+    margin-top: 3rem;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: linear-gradient(to top, var(--bg) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .hero-image-wrap img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    display: block;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .steps-image-wrap {
+    margin-top: 2.5rem;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+  }
+  .steps-image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(200, 80, 192, 0.08) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .steps-image-wrap img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+    display: block;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .benefits-image-wrap {
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  .benefits-image-wrap .img-card {
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--border);
+  }
+  .benefits-image-wrap .img-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(7, 7, 10, 0.6) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  .benefits-image-wrap .img-card img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+  .benefits-image-wrap .img-label {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    color: var(--text);
+    z-index: 1;
+  }
+  .benefits-image-wrap .img-label span {
+    font-size: 0.7rem;
+    font-weight: 400;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-muted);
+    display: block;
+    margin-top: 0.15rem;
+  }
+
   /* ── Responsive ── */
 
   /* Tablets and small desktops */
@@ -544,6 +651,9 @@
     .numbers-row { grid-template-columns: repeat(2, 1fr); }
     .hero p { font-size: 1rem; }
     .section-sub { font-size: 0.95rem; }
+    .hero-image-wrap img { height: 300px; }
+    .steps-image-wrap img { height: 260px; }
+    .benefits-image-wrap .img-card img { height: 180px; }
     .final-cta { padding: 4rem 0 3rem; }
     .final-cta p { font-size: 0.95rem; }
   }
@@ -595,6 +705,12 @@
     .steps { grid-template-columns: 1fr; gap: 1rem; }
     .benefits-grid { grid-template-columns: 1fr; gap: 1rem; }
     .numbers-row { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+
+    /* Images */
+    .hero-image-wrap img { height: 240px; }
+    .steps-image-wrap img { height: 200px; }
+    .benefits-image-wrap { grid-template-columns: 1fr; }
+    .benefits-image-wrap .img-card img { height: 180px; }
 
     /* Cards */
     .problem-card { padding: 1.5rem; }
@@ -706,6 +822,10 @@
           <span class="proof-number">R$ 35</span> cota a partir de
         </div>
       </div>
+
+      <div class="hero-image-wrap">
+        <img src="https://images.unsplash.com/photo-1759393852314-59dc00faeed3?w=900&q=80&fit=crop&crop=faces" alt="Creator gravando conteudo com smartphone" loading="lazy" onerror="this.parentElement.style.display='none'">
+      </div>
     </div>
   </div>
 </div>
@@ -766,6 +886,10 @@
         <p>Seu conteúdo performou? Você recebe. Quanto melhor o resultado, maior a recompensa. Top creators ganham até 50x a cota.</p>
       </div>
     </div>
+
+    <div class="steps-image-wrap">
+      <img src="https://images.unsplash.com/photo-1745848413060-0827ec268cda?w=1100&q=80&fit=crop" alt="Creator filmando conteudo em estudio" loading="lazy" onerror="this.parentElement.style.display='none'">
+    </div>
   </div>
 </section>
 
@@ -775,6 +899,17 @@
     <div class="section-label">Por que humaPubli</div>
     <h2>Feito pra quem <span class="grad">cria de verdade</span>.</h2>
     <p class="section-sub">Não importa se você tem 500 ou 500K seguidores. Importa se seu conteúdo converte.</p>
+
+    <div class="benefits-image-wrap">
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1758272422665-9df3d1fb0b9c?w=600&q=80&fit=crop&crop=faces" alt="Creator gravando video" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="img-label">Crie do seu jeito<span>Autenticidade vende mais que roteiro</span></div>
+      </div>
+      <div class="img-card">
+        <img src="https://images.unsplash.com/photo-1759215524600-7971d6a4dac0?w=600&q=80&fit=crop" alt="Acompanhando analytics no celular" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="img-label">Resultados em tempo real<span>Dashboard com views, cliques e ganhos</span></div>
+      </div>
+    </div>
 
     <div class="benefits-grid">
       <div class="benefit">
